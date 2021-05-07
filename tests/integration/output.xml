@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.0.1 (Python 3.8.2 on win32)" generated="20210506 22:22:50.030" rpa="false" schemaversion="2">
+<suite id="s1" name="Plytix" source="C:\ProyectosPython\flask\factory_method\tests\integration\plytix.robot">
+<test id="s1-t1" name="Plytix_001">
+<kw name="Log To Console" library="BuiltIn">
+<arg>${APP_ROOT}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20210506 22:22:50.340" endtime="20210506 22:22:50.341"/>
+</kw>
+<kw name="Start Process" library="Process">
+<arg>cd ${APP_ROOT} &amp;&amp; python wsgi.py</arg>
+<arg>shell=True</arg>
+<arg>cwd=${APP_ROOT}</arg>
+<arg>stdout=out.log</arg>
+<arg>stderr=error.log</arg>
+<doc>Starts a new process on background.</doc>
+<msg timestamp="20210506 22:22:50.343" level="INFO">Starting process:
+cd C:\ProyectosPython\flask\factory_method &amp;&amp; python wsgi.py</msg>
+<status status="PASS" starttime="20210506 22:22:50.341" endtime="20210506 22:22:50.347"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>plytix</arg>
+<arg>http://${HOST}:${PORT}/</arg>
+<arg>headers=${HEADERS}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20210506 22:22:50.348" level="INFO">Creating Session using : alias=plytix, url=http://127.0.0.1:5555/, headers={'Content-Type': 'application/json', 'x-api-key': '1111', 'x-api-version': '1'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20210506 22:22:50.348" endtime="20210506 22:22:50.349"/>
+</kw>
+<kw name="Delete On Session" library="RequestsLibrary">
+<var>${resp_reset}</var>
+<arg>plytix</arg>
+<arg>words/reset</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<msg timestamp="20210506 22:22:50.402" level="INFO">DELETE Request : url=http://127.0.0.1:5555/words/reset 
+ path_url=/words/reset 
+ headers={'User-Agent': 'python-requests/2.25.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'x-api-key': '1111', 'x-api-version': '1', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg timestamp="20210506 22:22:50.403" level="INFO">DELETE Response : url=http://127.0.0.1:5555/words/reset 
+ status=205, reason=RESET CONTENT 
+ headers={'Content-Type': 'application/json', 'Content-Length': '45', 'Server': 'Werkzeug/1.0.1 Python/3.8.2', 'Date': 'Thu, 06 May 2021 20:22:50 GMT'} 
+ body={"data": ["Operation reset successfully", 1]} 
+ </msg>
+<msg timestamp="20210506 22:22:50.403" level="INFO">${resp_reset} = &lt;Response [205]&gt;</msg>
+<status status="PASS" starttime="20210506 22:22:50.350" endtime="20210506 22:22:50.403"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${resp_reset.status_code}</arg>
+<arg>${205}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210506 22:22:50.403" endtime="20210506 22:22:50.406"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{body}</var>
+<arg>word=calle</arg>
+<arg>position=3</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20210506 22:22:50.407" level="INFO">&amp;{body} = { word=calle | position=3 }</msg>
+<status status="PASS" starttime="20210506 22:22:50.406" endtime="20210506 22:22:50.407"/>
+</kw>
+<kw name="Post On Session" library="RequestsLibrary">
+<var>${resp_insert}</var>
+<arg>plytix</arg>
+<arg>words/</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<msg timestamp="20210506 22:22:50.530" level="INFO">POST Request : url=http://127.0.0.1:5555/words/ 
+ path_url=/words/ 
+ headers={'User-Agent': 'python-requests/2.25.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'x-api-key': '1111', 'x-api-version': '1', 'Content-Length': '34'} 
+ body=b'{"word": "calle", "position": "3"}' 
+ </msg>
+<msg timestamp="20210506 22:22:50.530" level="INFO">POST Response : url=http://127.0.0.1:5555/words/ 
+ status=201, reason=CREATED 
+ headers={'Content-Type': 'application/json', 'Content-Length': '32', 'Server': 'Werkzeug/1.0.1 Python/3.8.2', 'Date': 'Thu, 06 May 2021 20:22:50 GMT'} 
+ body={"word": "calle", "position": 3} 
+ </msg>
+<msg timestamp="20210506 22:22:50.531" level="INFO">${resp_insert} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20210506 22:22:50.407" endtime="20210506 22:22:50.531"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${resp_insert.status_code}</arg>
+<arg>${201}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210506 22:22:50.531" endtime="20210506 22:22:50.534"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${json_insert}</var>
+<arg>${resp_insert.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20210506 22:22:50.536" level="INFO">${json_insert} = {'word': 'calle', 'position': 3}</msg>
+<status status="PASS" starttime="20210506 22:22:50.534" endtime="20210506 22:22:50.536"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${json_insert['word']}</arg>
+<arg>calle</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20210506 22:22:50.536" endtime="20210506 22:22:50.538"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${json_insert['position']}</arg>
+<arg>3</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<msg timestamp="20210506 22:22:50.540" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" starttime="20210506 22:22:50.538" endtime="20210506 22:22:50.540"/>
+</kw>
+<kw name="Get On Session" library="RequestsLibrary">
+<var>${resp_get}</var>
+<arg>plytix</arg>
+<arg>words/</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20210506 22:22:50.583" level="INFO">GET Request : url=http://127.0.0.1:5555/words/ 
+ path_url=/words/ 
+ headers={'User-Agent': 'python-requests/2.25.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'x-api-key': '1111', 'x-api-version': '1'} 
+ body=None 
+ </msg>
+<msg timestamp="20210506 22:22:50.583" level="INFO">GET Response : url=http://127.0.0.1:5555/words/ 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Content-Length': '19', 'Server': 'Werkzeug/1.0.1 Python/3.8.2', 'Date': 'Thu, 06 May 2021 20:22:50 GMT'} 
+ body={"data": ["calle"]} 
+ </msg>
+<msg timestamp="20210506 22:22:50.583" level="INFO">${resp_get} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20210506 22:22:50.540" endtime="20210506 22:22:50.583"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${json_get}</var>
+<arg>${resp_get.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20210506 22:22:50.587" level="INFO">${json_get} = {'data': ['calle']}</msg>
+<status status="PASS" starttime="20210506 22:22:50.586" endtime="20210506 22:22:50.587"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${resp_get.status_code}</arg>
+<arg>${200}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210506 22:22:50.609" endtime="20210506 22:22:50.611"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${json_get['data']}</arg>
+<arg>['calle']</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<msg timestamp="20210506 22:22:50.624" level="INFO">Argument types are:
+&lt;class 'list'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" starttime="20210506 22:22:50.622" endtime="20210506 22:22:50.624"/>
+</kw>
+<kw name="Terminate All Processes" library="Process">
+<doc>Terminates all still running processes started by this library.</doc>
+<msg timestamp="20210506 22:22:50.625" level="INFO">Gracefully terminating process.</msg>
+<msg timestamp="20210506 22:22:50.867" level="INFO">Process completed.</msg>
+<status status="PASS" starttime="20210506 22:22:50.625" endtime="20210506 22:22:50.867"/>
+</kw>
+<doc>Initialize Api server and launch sequence DELETE | POST | GET</doc>
+<status status="PASS" starttime="20210506 22:22:50.339" endtime="20210506 22:22:50.868"/>
+</test>
+<status status="PASS" starttime="20210506 22:22:50.033" endtime="20210506 22:22:50.870"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Plytix">Plytix</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
