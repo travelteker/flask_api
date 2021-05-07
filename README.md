@@ -1,4 +1,5 @@
-# Plytix - Api RestFul - Words
+# Api RestFul - microframework Flask Python
+| Implemented blueprints to manage routes
 
 ## Requirements
 For this exercise I consider the next requirements:
@@ -22,7 +23,7 @@ For this exercise I consider the next requirements:
 - I used factory method to Flask framework to try focused development using POO
 - For the scaffolding I used structural division
 - For internal structure data I used dataclasses like interfaces
-- All request need headers <X-Api-Key> and <X-Api-Version>
+- All request need headers \<X-Api-Key\> and \<X-Api-Version\>
 - An auxiliar endpoint was added to reset database for my operations
 - I added log files to register some information
 
