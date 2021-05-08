@@ -13,13 +13,12 @@ class Main:
 
     def __init__(self):
         self.__module = type(self).__module__
-        self.__conditions = ContainerConditions()
+        self.__conditions = ContainerConditions().apply_conditions()
         self.__error_handlers = CustomRegisterErrorHandler()
         self.__logger = LoggerReqRes()
 
     def create_app(self, config_file='settings.py') -> Flask:
         try:
-            self.__conditions.apply_conditions()
             app = Flask(__name__)
             app.config.from_pyfile(sep.join([getcwd(), 'app', 'config', config_file]))
             self.__logger.init_app(app)
